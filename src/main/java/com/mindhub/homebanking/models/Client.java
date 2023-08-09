@@ -62,7 +62,6 @@ public class Client {
         return accounts;
     }
 
-
     public void addAccount(Account account) {
         account.setOwner(this);
         accounts.add(account);
