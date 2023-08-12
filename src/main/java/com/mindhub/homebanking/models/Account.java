@@ -22,7 +22,7 @@ public class Account {
     @JoinColumn(name="owner_id")
     private Client owner;
 
-    @OneToMany(mappedBy = "accountTr", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private Set<Transaction> transactions = new HashSet<>();
 
     public Account() {
@@ -78,7 +78,10 @@ public class Account {
     }
 
     public void addTransaction(Transaction transaction) {
-        transaction.setAccountTr(this);
+        transaction.setAccount(this);
         transactions.add(transaction);
     }
+
+
+
 }
