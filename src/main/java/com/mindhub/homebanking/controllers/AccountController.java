@@ -31,7 +31,6 @@ public class AccountController {
     @GetMapping("/accounts/{id}")
 
     public AccountDTO getAccountsById(@PathVariable Long id){
-        Optional <Account> accountOptional= accountRepository.findById(id);
-        return new AccountDTO(accountOptional.get());
+        return new AccountDTO(accountRepository.findById(id).orElse(null));
     }
 }
