@@ -68,14 +68,24 @@ public class HomebankingApplication {
             Loan loan3 = new Loan("Automotriz", 300000., List.of(6,12,24,36));
             loanRepository.save(loan3);
 
-            ClientLoan clientLoan1 = new ClientLoan(400000., 60,client1,loan1);
+            ClientLoan clientLoan1 = new ClientLoan(400000., 60);
+            client1.addClientLoan(clientLoan1);
+            loan1.addClientLoan(clientLoan1);
             clientLoanRepository.save(clientLoan1);
-            ClientLoan clientLoan2 = new ClientLoan(50000., 12,client1,loan2);
+
+            ClientLoan clientLoan2 = new ClientLoan(50000., 12);
+            client1.addClientLoan(clientLoan2);
+            loan2.addClientLoan(clientLoan2);
             clientLoanRepository.save(clientLoan2);
 
-            ClientLoan clientLoan3 = new ClientLoan(100000., 24,client2,loan2);
+            ClientLoan clientLoan3 = new ClientLoan(100000., 24);
+            client2.addClientLoan(clientLoan3);
+            loan1.addClientLoan(clientLoan3);
             clientLoanRepository.save(clientLoan3);
-            ClientLoan clientLoan4 = new ClientLoan(200000., 36,client2,loan3);
+
+            ClientLoan clientLoan4 = new ClientLoan(200000., 36);
+            client2.addClientLoan(clientLoan4);
+            loan3.addClientLoan(clientLoan4);
             clientLoanRepository.save(clientLoan4);
 
             //Una tarjeta de débito GOLD para el cliente Melba, la fecha de inicio de validez es la fecha actual y la fecha de vencimiento 5 años desde la fecha actual, cardholder tendrá el nombre y apellido del cliente concatenado, los demás campos los puedes completar a tu elección, recuerda que el cvv tiene solo 3 dígitos.
@@ -83,11 +93,16 @@ public class HomebankingApplication {
             //Una tarjeta de crédito Titanium para el cliente Melba con los mismos datos excepto número y cvv.
             //
             //Crea una tarjeta de crédito silver para el segundo cliente.
-            Card card1 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.DEBIT,CardColor.GOLD,"2344-2323-2344-2344",234,LocalDate.now(),LocalDate.now().plusYears(5),client1);
+            Card card1 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.DEBIT,CardColor.GOLD,"2344-2323-2344-2344",234,LocalDate.now(),LocalDate.now().plusYears(5));
+            client1.addCard(card1);
             cardRepository.save(card1);
-            Card card2 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT,CardColor.TITANIUM,"111-2222-3333-4444",111,LocalDate.now(),LocalDate.now().plusYears(5),client1);
+
+            Card card2 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT,CardColor.TITANIUM,"111-2222-3333-4444",111,LocalDate.now(),LocalDate.now().plusYears(5));
+            client1.addCard(card2);
             cardRepository.save(card2);
-            Card card3 = new Card(client2.getFirstName()+" "+client2.getLastName(), CardType.CREDIT,CardColor.SILVER,"111-2222-3333-4444",111,LocalDate.now(),LocalDate.now().plusYears(5),client2);
+
+            Card card3 = new Card(client2.getFirstName()+" "+client2.getLastName(), CardType.CREDIT,CardColor.SILVER,"111-2222-3333-4444",111,LocalDate.now(),LocalDate.now().plusYears(5));
+            client2.addCard(card3);
             cardRepository.save(card3);
         };
 }
