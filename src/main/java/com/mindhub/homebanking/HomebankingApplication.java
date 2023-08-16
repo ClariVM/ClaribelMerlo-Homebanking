@@ -18,7 +18,7 @@ public class HomebankingApplication {
         SpringApplication.run(HomebankingApplication.class, args);
 	}
 @Bean
-    public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
+    public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
         return (args) -> {
             Client client1 = new Client("Melba","Morel","melba@mindhub.com");
             clientRepository.save(client1);
@@ -77,6 +77,18 @@ public class HomebankingApplication {
             clientLoanRepository.save(clientLoan3);
             ClientLoan clientLoan4 = new ClientLoan(200000., 36,client2,loan3);
             clientLoanRepository.save(clientLoan4);
+
+            //Una tarjeta de débito GOLD para el cliente Melba, la fecha de inicio de validez es la fecha actual y la fecha de vencimiento 5 años desde la fecha actual, cardholder tendrá el nombre y apellido del cliente concatenado, los demás campos los puedes completar a tu elección, recuerda que el cvv tiene solo 3 dígitos.
+            //
+            //Una tarjeta de crédito Titanium para el cliente Melba con los mismos datos excepto número y cvv.
+            //
+            //Crea una tarjeta de crédito silver para el segundo cliente.
+            Card card1 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.DEBIT,CardColor.GOLD,"2344-2323-2344-2344",234,LocalDate.now(),LocalDate.now().plusYears(5),client1);
+            cardRepository.save(card1);
+            Card card2 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT,CardColor.TITANIUM,"111-2222-3333-4444",111,LocalDate.now(),LocalDate.now().plusYears(5),client1);
+            cardRepository.save(card2);
+            Card card3 = new Card(client2.getFirstName()+" "+client2.getLastName(), CardType.CREDIT,CardColor.SILVER,"111-2222-3333-4444",111,LocalDate.now(),LocalDate.now().plusYears(5),client2);
+            cardRepository.save(card3);
         };
 }
 
