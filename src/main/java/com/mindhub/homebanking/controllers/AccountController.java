@@ -22,14 +22,9 @@ public class AccountController {
 
     @GetMapping("/accounts")
     public List<AccountDTO> getAccounts(){
-
-        List<Account> allAcounts = accountRepository.findAll();
-
-        List<AccountDTO> convertedListDto = allAcounts
-                                            .stream()
-                                            .map(currentAccount -> new AccountDTO(currentAccount))
-                                            .collect(Collectors.toList());
-        return convertedListDto;
+        return accountRepository.findAll().stream()
+                .map(currentAccount -> new AccountDTO(currentAccount))
+                .collect(Collectors.toList());
 
     }
 
