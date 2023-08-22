@@ -77,11 +77,13 @@ public class Account {
         return transactions;
     }
 
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     public void addTransaction(Transaction transaction) {
         transaction.setAccount(this);
         transactions.add(transaction);
     }
-
-
 
 }
