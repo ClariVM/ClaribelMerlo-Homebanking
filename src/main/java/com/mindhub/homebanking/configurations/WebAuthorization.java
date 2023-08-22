@@ -22,10 +22,9 @@ public class WebAuthorization {
 
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/clients/current", "/api/clients/current/cards", "/api/clients/current/accounts").hasAuthority("CLIENT")
-                .antMatchers(HttpMethod.POST,"/api/clients").permitAll()
-                .antMatchers("/api/login", "/web/index.html","/web/**", "/api/logout").permitAll()
-                .antMatchers("/accounts.html", "/web/cards.html", "/web/account.html", "/web/loans.html","/api/clients/current","/api/accounts/").hasAuthority("CLIENT")
-                .antMatchers( "/rest/**","/api/clients").hasAuthority("ADMIN")
+                .antMatchers("/api/login","/web/**","/api/logout").permitAll()
+                .antMatchers("/api/clients/current").hasAuthority("CLIENT")
+                .antMatchers( "/rest/**","/api/**").hasAuthority("ADMIN")
                 .anyRequest().denyAll();
 
 
