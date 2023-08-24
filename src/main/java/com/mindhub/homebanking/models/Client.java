@@ -19,7 +19,7 @@ public class Client {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
@@ -87,7 +87,7 @@ public class Client {
     }
 
     public void addAccount(Account account) {
-        account.setOwner(this);
+        account.setClient(this);
         accounts.add(account);
     }
 
