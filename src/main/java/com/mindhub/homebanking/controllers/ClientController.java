@@ -24,6 +24,7 @@ public class ClientController {
 
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
     private AccountRepository accountRepository;
 
     @GetMapping("/clients")
@@ -73,7 +74,6 @@ public class ClientController {
             client.addAccount(account);
             clientRepository.save(client);
             accountRepository.save(account);
-
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
