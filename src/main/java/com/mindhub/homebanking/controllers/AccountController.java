@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,7 +27,7 @@ public class AccountController {
     private AccountRepository accountRepository;
 
     @GetMapping("/accounts")
-    public List<AccountDTO> getAccounts(){
+    public List<AccountDTO> getAccounts() {
         return accountRepository.findAll().stream()
                 .map(currentAccount -> new AccountDTO(currentAccount))
                 .collect(Collectors.toList());
@@ -36,11 +36,12 @@ public class AccountController {
 
     @Autowired
     private ClientRepository clientRepository;
+
     @GetMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccountsById(@PathVariable Long id, Authentication authentication) {
         Client client = clientRepository.findByEmail(authentication.getName());
         Account account = accountRepository.findById(id).orElse(null);
-        if(account == null){
+        if (account == null) {
             return new ResponseEntity<>("account not found", HttpStatus.BAD_GATEWAY);
         }
         if (account.getClient().equals(client)) {
@@ -50,4 +51,29 @@ public class AccountController {
             return new ResponseEntity<>("This account it's not your", HttpStatus.BAD_REQUEST);
         }
     }
-}
+
+    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+    public ResponseEntity<Object> createAccount(Authentication authentication) {
+
+        Client client = clientRepository.findByEmail(authentication.getName());
+
+        if (client.getAccounts().size() == 3) {
+            return new ResponseEntity<>("Max amount of accounts reached", HttpStatus.FORBIDDEN);
+        }
+            String randomNum;
+            do {
+                Random random = new Random();
+                randomNum = "VIN-" + random.nextInt(90000000);
+            } while (accountRepository.findByNumber(randomNum) != null);
+
+        Account account = new Account(randomNum, LocalDate.now(),0.0);
+        client.addAccount(account);
+        accountRepository.save(account);
+            return new ResponseEntity<>("Account created succesfully", HttpStatus.CREATED);
+        }
+    }
+
+
+
+
+
