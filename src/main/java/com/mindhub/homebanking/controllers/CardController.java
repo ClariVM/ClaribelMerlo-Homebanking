@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,11 +41,12 @@ public class CardController {
         if (cardType == null || cardColor == null) {
             return new ResponseEntity<>("Missing data", HttpStatus.NO_CONTENT);
         }
-        List<Card> cards = cardRepository.findAll();
+        Set<Card> cards = client.getCards();
 
         int cardLimit;
-        if(cardType == CardType.CREDIT) {
+        if (cardType == CardType.CREDIT || cardType == CardType.DEBIT) {
             cardLimit = 3;
+
             long cardsSameType = cards.stream()
                     .filter(newCard -> newCard.getType() == cardType)
                     .count();
@@ -56,23 +58,7 @@ public class CardController {
             if (colorUsed) {
                 return new ResponseEntity<>("Color already used", HttpStatus.BAD_REQUEST);
             }
-
-        }else {
-            cardLimit = 3;
-            long cardsSameType = cards.stream()
-                    .filter(newCard -> newCard.getType() == cardType)
-                    .count();
-            if (cardsSameType >= cardLimit) {
-                return new ResponseEntity<>("Max amount of card reached", HttpStatus.FORBIDDEN);
-            }
-            boolean colorUsed = cards.stream()
-                    .anyMatch(card -> card.getType() == cardType && card.getColor() == cardColor);
-            if (colorUsed) {
-                return new ResponseEntity<>("Color already used", HttpStatus.BAD_REQUEST);
-            }
-
-            }
-
+        }
         // Generar número de tarjeta aleatorio y único
 
         String randomCardNumber;
