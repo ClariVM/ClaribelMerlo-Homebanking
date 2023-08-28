@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -71,7 +72,7 @@ public class ClientController {
                 randomNum = "VIN-" + random.nextInt(90000000);
             } while (accountRepository.findByNumber(randomNum) != null);
 
-            Account account = new Account(randomNum, LocalDate.now(), 0.0);
+            Account account = new Account(randomNum, LocalDateTime.now(), 0.0);
             client.addAccount(account);
             clientRepository.save(client);
             accountRepository.save(account);

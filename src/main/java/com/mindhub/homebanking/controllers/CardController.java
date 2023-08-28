@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -41,6 +42,8 @@ public class CardController {
         if (cardType == null || cardColor == null) {
             return new ResponseEntity<>("Missing data", HttpStatus.NO_CONTENT);
         }
+
+        //client.getCards() me trae solo las tarjetas del cliente autenticado, si quisiera el bjeto deberia usar el repositorio
         Set<Card> cards = client.getCards();
 
         int cardLimit;
@@ -56,7 +59,7 @@ public class CardController {
             boolean colorUsed = cards.stream()
                     .anyMatch(card -> card.getType() == cardType && card.getColor() == cardColor);
             if (colorUsed) {
-                return new ResponseEntity<>("Color already used", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Color already used", HttpStatus.FORBIDDEN);
             }
         }
         // Generar número de tarjeta aleatorio y único
@@ -69,7 +72,7 @@ public class CardController {
         int randomCvvNumber = new Random().nextInt(1000);
 
 
-        Card card = new Card(client.getFirstName(), cardType, cardColor, randomCardNumber, randomCvvNumber, LocalDate.now(), LocalDate.now().plusYears(5));
+        Card card = new Card(client.getFirstName(), cardType, cardColor, randomCardNumber, randomCvvNumber, LocalDateTime.now(), LocalDateTime.now().plusYears(5));
         client.addCard(card);
         cardRepository.save(card);
         return new ResponseEntity<>("Account created succesfully", HttpStatus.CREATED);

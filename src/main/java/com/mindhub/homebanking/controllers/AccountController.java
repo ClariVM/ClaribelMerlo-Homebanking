@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -65,7 +66,7 @@ public class AccountController {
                 randomNum = "VIN-" + random.nextInt(90000000);
             } while (accountRepository.findByNumber(randomNum) != null);
 
-        Account account = new Account(randomNum, LocalDate.now(),0.0);
+        Account account = new Account(randomNum, LocalDateTime.now(),0.0);
         client.addAccount(account);
         accountRepository.save(account);
             return new ResponseEntity<>("Account created succesfully", HttpStatus.CREATED);

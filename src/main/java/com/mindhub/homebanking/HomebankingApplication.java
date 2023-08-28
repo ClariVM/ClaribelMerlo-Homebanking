@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootApplication
@@ -34,19 +35,19 @@ public class HomebankingApplication {
             clientRepository.save(admin);
 
 
-            Account account1 = new Account("VIN001", LocalDate.now(),5000.0);
+            Account account1 = new Account("VIN001", LocalDateTime.now(),5000.0);
             client1.addAccount(account1);
             accountRepository.save(account1);
 
-            Account account2 = new Account("VIN002", LocalDate.now().plusDays(1),7500.0);
+            Account account2 = new Account("VIN002", LocalDateTime.now().plusDays(1),7500.0);
             client1.addAccount(account2);
             accountRepository.save(account2);
 
-            Account account3 = new Account("VIN003", LocalDate.now(),2000.0);
+            Account account3 = new Account("VIN003", LocalDateTime.now(),2000.0);
             client2.addAccount(account3);
             accountRepository.save(account3);
 
-            Account account4 = new Account("VIN004", LocalDate.now().plusDays(1),4500.0);
+            Account account4 = new Account("VIN004", LocalDateTime.now().plusDays(1),4500.0);
             client2.addAccount(account4);
             accountRepository.save(account4);
 
@@ -100,15 +101,15 @@ public class HomebankingApplication {
             //Una tarjeta de crédito Titanium para el cliente Melba con los mismos datos excepto número y cvv.
             //
             //Crea una tarjeta de crédito silver para el segundo cliente.
-            Card card1 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.DEBIT,CardColor.GOLD,"2344-2323-2344-2344",234,LocalDate.now(),LocalDate.now().plusYears(5));
+            Card card1 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.DEBIT,CardColor.GOLD,"2344-2323-2344-2344",234,LocalDateTime.now(), LocalDateTime.now().plusYears(5));
             client1.addCard(card1);
             cardRepository.save(card1);
 
-            Card card2 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT,CardColor.TITANIUM,"111-2222-3333-4444",111,LocalDate.now(),LocalDate.now().plusYears(5));
+            Card card2 = new Card(client1.getFirstName()+" "+client1.getLastName(), CardType.CREDIT,CardColor.TITANIUM,"111-2222-3333-4444",111,LocalDateTime.now(),LocalDateTime.now().plusYears(5));
             client1.addCard(card2);
             cardRepository.save(card2);
 
-            Card card3 = new Card(client2.getFirstName()+" "+client2.getLastName(), CardType.CREDIT,CardColor.SILVER,"111-2222-3333-4444",111,LocalDate.now(),LocalDate.now().plusYears(5));
+            Card card3 = new Card(client2.getFirstName()+" "+client2.getLastName(), CardType.CREDIT,CardColor.SILVER,"111-2222-3333-4444",111,LocalDateTime.now(),LocalDateTime.now().plusYears(5));
             client2.addCard(card3);
             cardRepository.save(card3);
         };
