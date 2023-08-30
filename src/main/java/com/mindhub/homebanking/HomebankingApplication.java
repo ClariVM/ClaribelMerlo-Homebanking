@@ -51,19 +51,19 @@ public class HomebankingApplication {
             client2.addAccount(account4);
             accountRepository.save(account4);
 
-            Transaction transaction1 = new Transaction(TransactionType.DEBIT,-200.,"Purchase at a store",LocalDate.now());
+            Transaction transaction1 = new Transaction(TransactionType.DEBIT,-200.,"Purchase at a store",LocalDateTime.now());
             account1.addTransaction(transaction1);
             transactionRepository.save(transaction1);
 
-            Transaction transaction2 = new Transaction(TransactionType.CREDIT,500.0,"Refund",LocalDate.now());
+            Transaction transaction2 = new Transaction(TransactionType.CREDIT,500.0,"Refund",LocalDateTime.now());
             account1.addTransaction(transaction2);
             transactionRepository.save(transaction2);
 
-            Transaction transaction3 = new Transaction(TransactionType.CREDIT,40000.0,"Online transfer",LocalDate.now());
+            Transaction transaction3 = new Transaction(TransactionType.CREDIT,40000.0,"Online transfer",LocalDateTime.now());
             account2.addTransaction(transaction3);
             transactionRepository.save(transaction3);
 
-            Transaction transaction4 = new Transaction(TransactionType.DEBIT,-2500.0,"Mobile Payment",LocalDate.now());
+            Transaction transaction4 = new Transaction(TransactionType.DEBIT,-2500.0,"Mobile Payment",LocalDateTime.now());
             account2.addTransaction(transaction4);
             transactionRepository.save(transaction4);
 

@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
+import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
@@ -33,12 +34,12 @@ public class AccountController {
                 .collect(Collectors.toList());
 
     }
-
     @Autowired
     private ClientRepository clientRepository;
 
     @GetMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccountsById(@PathVariable Long id, Authentication authentication) {
+
         Client client = clientRepository.findByEmail(authentication.getName());
         Account account = accountRepository.findById(id).orElse(null);
         if (account == null) {
@@ -56,7 +57,6 @@ public class AccountController {
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 
         Client client = clientRepository.findByEmail(authentication.getName());
-
         if (client.getAccounts().size() == 3) {
             return new ResponseEntity<>("Max amount of accounts reached", HttpStatus.FORBIDDEN);
         }
@@ -71,6 +71,16 @@ public class AccountController {
         accountRepository.save(account);
             return new ResponseEntity<>("Account created succesfully", HttpStatus.CREATED);
         }
+        @GetMapping("/clients/current/accounts")
+    public ResponseEntity<Object> getAccount(Authentication authentication){
+            Client client = clientRepository.findByEmail(authentication.getName());
+            if (client !=null) {
+                return new ResponseEntity<>(new ClientDTO(client).getAccounts(), HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>("Resource bot found", HttpStatus.NOT_FOUND);
+            }
+        }
+
     }
 
 

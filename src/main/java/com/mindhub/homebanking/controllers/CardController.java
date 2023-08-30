@@ -28,13 +28,7 @@ public class CardController {
     @Autowired
     CardRepository cardRepository;
 
-    @GetMapping("/cards")
-    public List<CardDTO> getCards() {
-        return cardRepository.findAll().stream()
-                .map(currentCard -> new CardDTO(currentCard))
-                .collect(Collectors.toList());
 
-    }
     @PostMapping ("/clients/current/cards")
  public ResponseEntity<Object> createCard (Authentication authentication, @RequestParam CardType cardType, @RequestParam CardColor cardColor) {
         Client client = clientRepository.findByEmail(authentication.getName());
@@ -43,7 +37,7 @@ public class CardController {
             return new ResponseEntity<>("Missing data", HttpStatus.NO_CONTENT);
         }
 
-        //client.getCards() me trae solo las tarjetas del cliente autenticado, si quisiera el bjeto deberia usar el repositorio
+        //client.getCards() me trae solo las tarjetas del cliente autenticado, si quisiera el Objeto deberia usar el repositorio
         Set<Card> cards = client.getCards();
 
         int cardLimit;

@@ -21,13 +21,13 @@ public class WebAuthorization {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/web/index.html", "/web/css/**","/web/img/**","/web/js/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/login","/api/clients").permitAll()
+                .antMatchers("/web/**.html", "/web/css/**","/web/img/**","/web/js/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/login","/api/clients","/api/logout").permitAll()
                 .antMatchers("/web/**","/api/accounts/**","/api/clients/current","/api/cards").hasAuthority("CLIENT")
-                .antMatchers(HttpMethod.POST,"/api/clients/current/accounts").hasAuthority("CLIENT")
-                .antMatchers(HttpMethod.POST,"/api/clients/current/cards").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST,"/api/clients/current/accounts","/api/clients/current/cards").hasAuthority("CLIENT")
+                .antMatchers("/api/clients/current/accounts").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST,"/api/transactions").hasAuthority("CLIENT")
                 .antMatchers( "/rest/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/logout").hasAnyAuthority("CLIENT","ADMIN")
                 .anyRequest().denyAll();
 
 
