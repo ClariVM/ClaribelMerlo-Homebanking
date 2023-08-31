@@ -75,6 +75,9 @@ public class TransactionController {
          if (fromAccount.getBalance() < amount) {
              return new ResponseEntity<>("Insufficient balance in the account", HttpStatus.FORBIDDEN);
          }
+         if(amount <0){
+             return new ResponseEntity<>("Negative balances cannot be sent", HttpStatus.FORBIDDEN);
+         }
          // Crear la transacción de débito asociada a la cuenta de origen
 
          Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -amount, description, LocalDateTime.now());
