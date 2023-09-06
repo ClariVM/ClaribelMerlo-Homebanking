@@ -21,13 +21,13 @@ public class Transaction {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="account_id")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     public Transaction() {
     }
 
-    public Transaction(TransactionType type, Double amount, String description, LocalDateTime date ) {
+    public Transaction(TransactionType type, Double amount, String description, LocalDateTime date) {
         this.type = type;
         this.amount = amount;
         this.description = description;
@@ -73,11 +73,12 @@ public class Transaction {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
+
     public Account getAccount() {
         return account;
     }
 
     public void setAccount(Account account) {
-        this.account= account;
+        this.account = account;
     }
 }

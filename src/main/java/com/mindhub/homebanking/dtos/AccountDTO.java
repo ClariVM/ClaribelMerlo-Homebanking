@@ -16,11 +16,12 @@ public class AccountDTO {
 
 
     private Set<TransactionDTO> transactions = new HashSet<>();
-    public AccountDTO(Account account){
-       id = account.getId();
-       number =account.getNumber();
-       creationDate = account.getCreationDate();
-       balance = account.getBalance();
+
+    public AccountDTO(Account account) {
+        id = account.getId();
+        number = account.getNumber();
+        creationDate = account.getCreationDate();
+        balance = account.getBalance();
 
 
         transactions = account.getTransactions()
@@ -40,7 +41,7 @@ public class AccountDTO {
         return number;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 

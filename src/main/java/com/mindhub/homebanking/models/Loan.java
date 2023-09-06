@@ -78,10 +78,11 @@ public class Loan {
         this.clients = clientLoans;
 
     }
+
     public void addClientLoan(ClientLoan clientLoan) {
         clientLoan.setLoan(this);
         clients.add(clientLoan);
-}
+    }
 }
 
 

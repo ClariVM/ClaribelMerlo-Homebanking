@@ -18,7 +18,7 @@ public class CardDTO {
     private LocalDateTime fromDate = LocalDateTime.now();
     private LocalDateTime thruDate = LocalDateTime.now();
 
-    public CardDTO(Card card){
+    public CardDTO(Card card) {
         id = card.getId();
         cardHolder = card.getCardHolder();
         type = card.getType();

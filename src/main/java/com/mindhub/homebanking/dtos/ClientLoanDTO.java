@@ -14,12 +14,12 @@ public class ClientLoanDTO {
     private Integer payments;
 
 
-    public ClientLoanDTO (ClientLoan clientLoan){
+    public ClientLoanDTO(ClientLoan clientLoan) {
         id = clientLoan.getId();
         loanId = clientLoan.getLoan().getId();
         name = clientLoan.getLoan().getName();
-        amount= clientLoan.getAmount();
-        payments= clientLoan.getPayments();
+        amount = clientLoan.getAmount();
+        payments = clientLoan.getPayments();
     }
 
     //Getters
@@ -27,12 +27,15 @@ public class ClientLoanDTO {
     public Long getId() {
         return id;
     }
+
     public Long getLoanId() {
         return loanId;
     }
+
     public String getName() {
         return name;
     }
+
     public Double getAmount() {
         return amount;
     }

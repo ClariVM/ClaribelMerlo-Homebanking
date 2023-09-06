@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class ClientLoan{
+public class ClientLoan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -15,12 +15,12 @@ public class ClientLoan{
     private Double amount;
     private Integer payments;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "loan_id")
-    private  Loan loan;
+    private Loan loan;
 
     public ClientLoan() {
     }

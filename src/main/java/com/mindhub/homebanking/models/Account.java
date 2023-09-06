@@ -20,7 +20,7 @@ public class Account {
     private Double balance;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)

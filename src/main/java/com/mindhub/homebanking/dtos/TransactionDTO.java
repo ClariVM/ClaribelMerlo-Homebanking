@@ -14,11 +14,11 @@ public class TransactionDTO {
     private TransactionType type;
 
     public TransactionDTO(Transaction transaction) {
-       id = transaction.getId();
-       amount = transaction.getAmount();
-       description = transaction.getDescription();
-       date = transaction.getDate();
-       type = transaction.getType();
+        id = transaction.getId();
+        amount = transaction.getAmount();
+        description = transaction.getDescription();
+        date = transaction.getDate();
+        type = transaction.getType();
     }
 
     //Getters

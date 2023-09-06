@@ -6,6 +6,8 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,23 +27,23 @@ import java.util.stream.Collectors;
 public class AccountController {
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
+    @Autowired
+    private ClientService clientService;
 
     @GetMapping("/accounts")
-    public List<AccountDTO> getAccounts() {
-        return accountRepository.findAll().stream()
-                .map(currentAccount -> new AccountDTO(currentAccount))
-                .collect(Collectors.toList());
-
+    public ResponseEntity<Object> getAccounts() {
+        List<Account> accounts = accountService.findAllAccounts();
+        List<AccountDTO> accountsDTO = accountService.mapClientsDTO(accounts);
+        return new ResponseEntity<>(accountsDTO, HttpStatus.ACCEPTED);
     }
-    @Autowired
-    private ClientRepository clientRepository;
+
 
     @GetMapping("/accounts/{id}")
     public ResponseEntity<Object> getAccountsById(@PathVariable Long id, Authentication authentication) {
 
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account account = accountRepository.findById(id).orElse(null);
+        Client client = clientService.findByEmail(authentication.getName());
+        Account account = accountService.findById(id);
         if (account == null) {
             return new ResponseEntity<>("account not found", HttpStatus.BAD_GATEWAY);
         }
@@ -56,32 +58,33 @@ public class AccountController {
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.findByEmail(authentication.getName());
         if (client.getAccounts().size() == 3) {
             return new ResponseEntity<>("Max amount of accounts reached", HttpStatus.FORBIDDEN);
         }
-            String randomNum;
-            do {
-                Random random = new Random();
-                randomNum = "VIN-" + random.nextInt(90000000);
-            } while (accountRepository.findByNumber(randomNum) != null);
+        String randomNum;
+        do {
+            Random random = new Random();
+            randomNum = "VIN-" + random.nextInt(90000000);
+        } while (accountService.findByNumber(randomNum) != null);
 
-        Account account = new Account(randomNum, LocalDateTime.now(),0.0);
+        Account account = new Account(randomNum, LocalDateTime.now(), 0.0);
         client.addAccount(account);
-        accountRepository.save(account);
-            return new ResponseEntity<>("Account created succesfully", HttpStatus.CREATED);
-        }
-        @GetMapping("/clients/current/accounts")
-    public ResponseEntity<Object> getAccount(Authentication authentication){
-            Client client = clientRepository.findByEmail(authentication.getName());
-            if (client !=null) {
-                return new ResponseEntity<>(new ClientDTO(client).getAccounts(), HttpStatus.ACCEPTED);
-            } else {
-                return new ResponseEntity<>("Resource bot found", HttpStatus.NOT_FOUND);
-            }
-        }
-
+        accountService.saveAccount(account);
+        return new ResponseEntity<>("Account created succesfully", HttpStatus.CREATED);
     }
+
+    @GetMapping("/clients/current/accounts")
+    public ResponseEntity<Object> getAccount(Authentication authentication) {
+        Client client = clientService.findByEmail(authentication.getName());
+        if (client != null) {
+            return new ResponseEntity<>(new ClientDTO(client).getAccounts(), HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("Resource bot found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+}
 
 
 

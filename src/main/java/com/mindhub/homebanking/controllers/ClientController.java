@@ -5,6 +5,8 @@ import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,25 +26,24 @@ import java.util.stream.Collectors;
 public class ClientController {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
 
-    @GetMapping("/clients")
-    public List<ClientDTO> getClients(){
-        return clientRepository.findAll()
-                .stream()
-                .map(currentClient -> new ClientDTO(currentClient))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/clients/{id}")
-    public ClientDTO getClientsById(@PathVariable Long id){
-        return new ClientDTO(clientRepository.findById(id).orElse(null));
-    }
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @GetMapping("/clients")
+    public ResponseEntity<Object> getClients() {
+        List<Client> clients = clientService.findAllClients();
+        List<ClientDTO> clientsDTO = clientService.mapClientsDTO(clients);
+        return new ResponseEntity<>(clientsDTO, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/clients/{id}")
+    public ClientDTO getClientsById(@PathVariable Long id) {
+        return clientService.getClientsDTOById(id);
+    }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
@@ -54,15 +55,15 @@ public class ClientController {
         if (lastName.isBlank()) {
             return new ResponseEntity<>("Lastname is empty", HttpStatus.FORBIDDEN);
         }
-        if (email.isBlank() ) {
+        if (email.isBlank()) {
             return new ResponseEntity<>("Email is empty", HttpStatus.FORBIDDEN);
         }
         if (password.isBlank()) {
             return new ResponseEntity<>("Password is empty", HttpStatus.FORBIDDEN);
         }
-        if (clientRepository.findByEmail(email) !=  null) {
+        if (clientService.findByEmail(email) != null) {
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
-        }else{
+        } else {
             Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
 
             String randomNum;
@@ -70,19 +71,20 @@ public class ClientController {
             do {
                 Random random = new Random();
                 randomNum = "VIN-" + random.nextInt(90000000);
-            } while (accountRepository.findByNumber(randomNum) != null);
+            } while (accountService.findByNumber(randomNum) != null);
 
             Account account = new Account(randomNum, LocalDateTime.now(), 0.0);
             client.addAccount(account);
-            clientRepository.save(client);
-            accountRepository.save(account);
+            clientService.saveClient(client);
+            accountService.saveAccount(account);
+
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping("/clients/current")
-    public ClientDTO getAuthenticatedClient(Authentication authentication) {
-        return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+    public ClientDTO getClientCurrent(Authentication authentication) {
+        return clientService.getClientCurrent(authentication.getName());
     }
 
 }

@@ -38,7 +38,7 @@ public class Client {
         this.password = password;
     }
 
-    public List<Loan> getLoans(){
+    public List<Loan> getLoans() {
         return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(Collectors.toList());
     }
 
