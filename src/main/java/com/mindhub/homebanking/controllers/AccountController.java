@@ -55,7 +55,8 @@ public class AccountController {
         }
     }
 
-    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
+
+    @PostMapping("/clients/current/accounts")
     public ResponseEntity<Object> createAccount(Authentication authentication) {
 
         Client client = clientService.findByEmail(authentication.getName());

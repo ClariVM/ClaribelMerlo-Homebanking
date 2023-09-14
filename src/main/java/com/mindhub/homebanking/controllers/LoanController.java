@@ -90,14 +90,16 @@ public class LoanController {
         List<Loan> loans = client.getLoans();
         int loanLimit;
 
-        if (loan.getId() == 1 || loan.getId() == 2 || loan.getId() == 3) {
+        String loanName = loan.getName();
+
+        if ("Hipotecario".equalsIgnoreCase(loanName) || "Personal".equalsIgnoreCase(loanName) || "Automotriz".equalsIgnoreCase(loanName)) {
             loanLimit = 1;
 
             long loanSameType = loans.stream()
-                    .filter(newLoan -> newLoan.getId().equals(loan.getId()))
+                    .filter(newLoan -> newLoan.getName().equals(loanName))
                     .count();
             if (loanSameType >= loanLimit) {
-                return new ResponseEntity<>("Maximum " + loan.getName() + " loan limit reached", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("Maximum " + loanName + " loan limit reached", HttpStatus.FORBIDDEN);
             }
         }
         /////////////////////////////////////////////////////////

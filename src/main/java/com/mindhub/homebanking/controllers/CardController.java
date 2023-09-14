@@ -8,6 +8,7 @@ import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.CardService;
 import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.utils.CardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,10 +63,9 @@ public class CardController {
 
         String randomCardNumber;
         do {
-            Random random = new Random();
-            randomCardNumber = random.nextInt(9999) + " " + random.nextInt(9999) + " " + random.nextInt(9999) + " " + random.nextInt(9999);
+            randomCardNumber = CardUtils.getCardNumber();
         } while (cardService.findCardByNumber(randomCardNumber) != null);
-        int randomCvvNumber = new Random().nextInt(1000);
+        int randomCvvNumber = CardUtils.getRandomCvvNumber();
 
 
         Card card = new Card(client.getFirstName(), cardType, cardColor, randomCardNumber, randomCvvNumber, LocalDateTime.now(), LocalDateTime.now().plusYears(5));
@@ -73,6 +73,8 @@ public class CardController {
         cardService.saveCard(card);
         return new ResponseEntity<>("Account created succesfully", HttpStatus.CREATED);
     }
+
+
 
 
 }

@@ -7,6 +7,7 @@ import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.AccountService;
 import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.utils.CardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class ClientController {
         return clientService.getClientsDTOById(id);
     }
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @PostMapping("/clients")
     public ResponseEntity<Object> register(
             @RequestParam String firstName, @RequestParam String lastName,
             @RequestParam String email, @RequestParam String password) {
@@ -70,7 +71,7 @@ public class ClientController {
 
             do {
                 Random random = new Random();
-                randomNum = "VIN-" + random.nextInt(90000000);
+                randomNum = "VIN-" + CardUtils.getRandomCvvNumber();
             } while (accountService.findByNumber(randomNum) != null);
 
             Account account = new Account(randomNum, LocalDateTime.now(), 0.0);
@@ -82,7 +83,7 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping("/clients/current")
+    @GetMapping("/clients/current")
     public ClientDTO getClientCurrent(Authentication authentication) {
         return clientService.getClientCurrent(authentication.getName());
     }
