@@ -31,8 +31,8 @@ public class ClientController {
     @Autowired
     private AccountService accountService;
 
-   /* @Autowired
-    private PasswordEncoder passwordEncoder;*/
+   @Autowired
+  private PasswordEncoder passwordEncoder;
 
     @GetMapping("/clients")
     public ResponseEntity<Object> getClients() {
@@ -65,8 +65,8 @@ public class ClientController {
         if (clientService.findByEmail(email) != null) {
             return new ResponseEntity<>("Email already in use", HttpStatus.FORBIDDEN);
         } else {
-            Client client = new Client(firstName, lastName, email, password);
-
+            Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
+            clientService.saveClient(client);
             String randomNum;
 
             do {
@@ -76,7 +76,6 @@ public class ClientController {
 
             Account account = new Account(randomNum, LocalDateTime.now(), 0.0);
             client.addAccount(account);
-            clientService.saveClient(client);
             accountService.saveAccount(account);
 
         }
